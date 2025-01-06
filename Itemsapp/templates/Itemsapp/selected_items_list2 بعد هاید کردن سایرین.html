@@ -1,0 +1,560 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>Selected Items</title>#}
+{#    <style>#}
+{#        /* Optional: Simple styling for the list */#}
+{#        ul {#}
+{#            list-style-type: none;#}
+{#        }#}
+{##}
+{#        li {#}
+{#            margin: 10px 0;#}
+{#        }#}
+{##}
+{#        input {#}
+{#            margin-bottom: 20px;#}
+{#            padding: 5px;#}
+{#            width: 100%;#}
+{#            max-width: 400px;#}
+{#        }#}
+{##}
+{#        /* Highlighting style for matched text */#}
+{#        .highlight {#}
+{#            background-color: yellow;  /* Change this to your desired highlight color */#}
+{#            font-weight: bold;          /* Optional: make it bold */#}
+{#        }#}
+{#    </style>#}
+{#</head>#}
+{#<body>#}
+{##}
+{#    <h1>Selected Items for Request: {{ current_request.name }}</h1>#}
+{##}
+{#    <!-- Search box for filtering selected items -->#}
+{#    <input type="text" id="searchBox" placeholder="Search selected items...">#}
+{##}
+{#    <!-- Selected items list -->#}
+{#    <ul id="selectedItemsList">#}
+{#        {% for selected_item in selected_items %}#}
+{#        <li class="item" data-item-id="{{ selected_item.item.id }}">#}
+{#            <h3 class="item-title">{{ selected_item.item.title }}</h3>#}
+{#            <p class="item-description">{{ selected_item.item.short_description }}</p>#}
+{#            <!-- Remove button for deselecting items -->#}
+{#            <button class="remove-btn" data-item-id="{{ selected_item.item.id }}">Remove</button>#}
+{#        </li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+{##}
+{#    <a href="{% url 'item_list_for_request' current_request.id %}">Back to Task List</a>#}
+{##}
+{#    <button onclick="window.location.href='{% url 'pdf_view' current_request.id %}'">Download PDF</button>#}
+{##}
+{##}
+{#<script>#}
+{#    // Handle item removal with AJAX#}
+{#    document.querySelectorAll('.remove-btn').forEach(button => {#}
+{#        button.addEventListener('click', function() {#}
+{#            const itemId = this.getAttribute('data-item-id');#}
+{#            const listItem = this.closest('li'); // Get the corresponding <li> element#}
+{##}
+{#            // Make an AJAX request to remove the item#}
+{#            fetch("{% url 'remove_from_selected_for_request' current_request.id 0 %}".replace('/0/', '/' + itemId + '/'), {#}
+{#                method: 'POST',#}
+{#                headers: {#}
+{#                    'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included#}
+{#                    'Content-Type': 'application/json'#}
+{#                },#}
+{#                body: JSON.stringify({ item_id: itemId })#}
+{#            })#}
+{#            .then(response => {#}
+{#                if (response.ok) {#}
+{#                    // Remove the item from the list without reloading the page#}
+{#                    listItem.remove();#}
+{#                } else {#}
+{#                    alert("Failed to remove item.");#}
+{#                }#}
+{#            })#}
+{#            .catch(error => {#}
+{#                console.error("Error removing item:", error);#}
+{#            });#}
+{#        });#}
+{#    });#}
+{#</script>#}
+{##}
+{##}
+{#</body>#}
+{#</html>#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>Selected Items</title>#}
+{#    <style>#}
+{#        /* Optional: Simple styling for the list */#}
+{#        ul {#}
+{#            list-style-type: none;#}
+{#        }#}
+{##}
+{#        li {#}
+{#            margin: 10px 0;#}
+{#        }#}
+{##}
+{#        input {#}
+{#            margin-bottom: 20px;#}
+{#            padding: 5px;#}
+{#            width: 100%;#}
+{#            max-width: 400px;#}
+{#        }#}
+{##}
+{#        /* Highlighting style for matched text */#}
+{#        .highlight {#}
+{#            background-color: yellow;  /* Change this to your desired highlight color */#}
+{#            font-weight: bold;          /* Optional: make it bold */#}
+{#        }#}
+{#    </style>#}
+{#</head>#}
+{#<body>#}
+{##}
+{#    <h1>Selected Items for Request: {{ current_request.name }}</h1>#}
+{##}
+{#    <!-- Search box for filtering selected items -->#}
+{#    <input type="text" id="searchBox" placeholder="Search selected items...">#}
+{##}
+{#    <!-- Selected items list -->#}
+{#    <ul id="selectedItemsList">#}
+{#        {% for selected_item in selected_items %}#}
+{#        <li class="item">#}
+{#            <h3 class="item-title">{{ selected_item.item.title }}</h3>#}
+{#            <p class="item-description">{{ selected_item.item.short_description }}</p>#}
+{#            <!-- Remove button for deselecting items -->#}
+{#            <button onclick="window.location.href='{% url 'remove_from_selected_for_request' current_request.id selected_item.item.id %}'">Remove</button>#}
+{#        </li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+{#    <a href="{% url 'item_list_for_request' current_request.id %}">Back to Task List</a>#}
+{##}
+{#    <button onclick="window.location.href='{% url 'pdf_view' current_request.id %}'">Download PDF</button>#}
+{##}
+{##}
+{#    <script>#}
+{#        // JavaScript to handle the search functionality with highlighting for selected items#}
+{#        document.getElementById('searchBox').addEventListener('keyup', function() {#}
+{#            const searchQuery = this.value.toLowerCase();#}
+{#            const items = document.querySelectorAll('#selectedItemsList .item');#}
+{##}
+{#            items.forEach(function(item) {#}
+{#                const titleElement = item.querySelector('.item-title');#}
+{#                const descriptionElement = item.querySelector('.item-description');#}
+{#                const title = titleElement.textContent; // Use textContent for the original title#}
+{##}
+{#                // Reset the inner HTML to original#}
+{#                titleElement.innerHTML = title;#}
+{#                descriptionElement.innerHTML = descriptionElement.textContent;#}
+{##}
+{#                // Show or hide the item based on search query#}
+{#                if (title.toLowerCase().includes(searchQuery)) {#}
+{#                    item.style.display = ''; // Show the item#}
+{#                    highlightMatches(titleElement, searchQuery); // Highlight matches#}
+{#                } else {#}
+{#                    item.style.display = 'none'; // Hide the item#}
+{#                }#}
+{#            });#}
+{#        });#}
+{##}
+{#        function highlightMatches(element, query) {#}
+{#            const regex = new RegExp(`(${query})`, 'gi'); // Create a regex for case-insensitive matching#}
+{#            element.innerHTML = element.textContent.replace(regex, '<span class="highlight">$1</span>'); // Highlight matches#}
+{#        }#}
+{#    </script>#}
+{##}
+{#</body>#}
+{#</html>#}
+
+
+
+
+
+
+<html class="no-js" lang="zxx"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>select item</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/assets/img/favicon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="/static/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/assets/css/animate.min.css">
+    <link rel="stylesheet" href="/static/assets/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/static/assets/css/all.min.css">
+    <link rel="stylesheet" href="/static/assets/css/odometer.min.css">
+    <link rel="stylesheet" href="/static/assets/css/meanmenu.css">
+    <link rel="stylesheet" href="/static/assets/css/swipper.css">
+    <link rel="stylesheet" href="/static/assets/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+
+    body a {
+        text-decoration: none;
+    }
+        /* Highlighting style for matched text */
+        .highlight {
+            background-color: yellow; /* Change this to your desired highlight color */
+            font-weight: bold; /* Optional: make it bold */
+        }
+
+        /* Style for search box */
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        /* Style for the item list */
+        .item {
+            margin: 10px 0;
+            border: 1px solid #dee2e6; /* Border for item */
+            border-radius: 0.25rem; /* Rounded corners */
+            padding: 15px; /* Padding for better spacing */
+            transition: box-shadow 0.3s; /* Smooth shadow transition */
+        }
+
+        .item:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect on hover */
+        }
+    </style>
+
+<body style="">
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="text-center">
+    <div class="row">
+      <div class="col-12 mt-4">
+        <a href="#">
+          <button onclick="window.location.href='{% url 'pdf_view' current_request.id %}'" style="padding: 10px; background-color: #d63384; color: white" class="btn"> Start Download <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16" style="padding-left: 3px">
+  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+</svg></button>
+
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="page-wrapper home-3" data-background="/static/assets/img/bg/page-bg-1.jpg" style="display: none">
+
+        <!-- PRELOADER -->
+
+        <!-- /PRELOADER -->
+
+        <!-- header-start -->
+        <div class="bostami-header-area mb-30 z-index-5">
+            <div class="container">
+                <div class="bostami-header-wrap">
+                    <div class="row">
+
+                        <!-- logo -->
+                        <div class="col-6">
+                            <div class="bostami-header-logo">
+                                <a class="site-logo" href="{% url 'create_request' %}">
+                                    <img src="" alt="">
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- menu btn -->
+                        <div class="col-6">
+                            <div class="bostami-header-menu-btn text-right mb-0">
+                                <div class="dark-btn dark-btn-stored dark-btn-icon">
+                                    <i class="fa-light fa-moon"></i>
+                                    <i class="fa-light fa-sun"></i>
+                                </div>
+                                <div class="menu-btn toggle_menu d-lg-none">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- mobile menu -->
+                <div class="mobile-menu-wrap">
+                    <div class="mobile-menu mobile_menu_3 mean-container"><div class="mean-bar"><a href="#nav" class="meanmenu-reveal" style="right: 0px; left: auto; display: inline;"><span><span><span></span></span></span></a><nav class="mean-nav">
+                                <ul style="display: none;">
+                                    <li class="active mean-last">
+                                        <a href="{% url 'request_list' %}">
+                                            <span>
+                                                <i class="fa-light fa-address-book"></i>
+                                            </span>
+                                            contact
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- header-end -->
+
+
+        <div class="container z-index-3">
+            <div class="row">
+
+
+                <!-- about-page-start -->
+                <div class="col-xxl-12 col-xl-12 col-lg-12">
+
+                    <!-- main-menu-start -->
+                    <div class="text-right">
+                        <div class="bostami-main-menu-wrap">
+                            <div class="mean-push"></div><nav class="bastami-main-menu main_menu_3" style="display: none;">
+                                <ul>
+                                    <li>
+                                        <a href="{% url 'create_request' %}">
+                                            <span>
+                                                <i class="fa-light fa-newspaper"></i>
+                                            </span>
+                                            New
+                                        </a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="{% url 'request_list' %}">
+                                            <span>
+                                                <i class="fa-light fa-address-book"></i>
+                                            </span>
+                                            Reports
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <!-- main-menu-end -->
+
+                    <div class="bostami-page-content-wrap">
+
+                        <!-- page title -->
+                        <div class="section-wrapper pl-60 pr-60 pt-60">
+                            <div class="bostami-page-title-wrap mb-15">
+                                <h2 class="page-title">LIST</h2>
+                            </div>
+                        </div>
+
+
+
+
+                        <!-- contact form -->
+                        <div class="section-wrapper pl-60 pr-60" dir="rtl">
+
+                            <div class="container mt-5" style="display: none">
+                                <h1 class="text-center mb-5">نام شناور: {{ current_request.name }}</h1> <!-- Title in Farsi -->
+
+                                <!-- Search box for filtering items -->
+                                 <input type="text" id="searchBox" placeholder="Search selected items ..." style="padding: 6px; min-width: 250px; margin-bottom: 2rem; margin-top: 2rem">
+
+                            <!-- Selected items list -->
+                            <ul id="selectedItemsList">
+                                {% for selected_item in selected_items %}
+                                <li class="item" data-item-id="{{ selected_item.item.id }}">
+                                    <h4 class="item-title">{{ selected_item.item.title }}</h4>
+                                    <p class="item-description">{{ selected_item.item.short_description }}</p>
+                                    <!-- Remove button for deselecting items -->
+                                    <button class="remove-btn btn btn-danger btn-sm" data-item-id="{{ selected_item.item.id }}">حذف</button>
+                                </li>
+                                {% endfor %}
+                            </ul>
+
+{#                            <div style="margin-top: 3rem; margin-bottom: 3rem">#}
+{##}
+{##}
+{#                                <a href="{% url 'item_list_for_request' current_request.id %}"><button style="font-size: 16px; text-decoration: none">Back to Task List</button></a>#}
+{##}
+{#                                <button onclick="window.location.href='{% url 'pdf_view' current_request.id %}'">Download PDF</button>#}
+{##}
+{#                            </div>#}
+
+
+
+                            <h4 class="mt-4">افزودن آیتم جدید به لیست:</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}  <!-- نمایش فیلدهای فرم -->
+            <button type="submit" class="btn btn-primary mt-2 mb-5">ذخیره</button>
+        </form>
+
+
+<!-- نمایش جزئیات موجود -->
+{#<h3 class="mt-4">جزئیات موجود برای این درخواست:</h3>#}
+<ul id="existingDetailsList">
+    {% for detail in existing_details %}
+        <li style="background-color: #a2a2a2" class="item" data-detail-id="{{ detail.id }}">
+            <h4 class="item-title">{{ detail.detail_spacial }}</h4>
+            <p class="item-description">{{ detail.description_spacial }}</p>
+            <!-- دکمه حذف -->
+            <form method="post" action="{% url 'delete_request_detail' current_request.id detail.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="remove-btn btn btn-danger btn-sm">حذف</button>
+            </form>
+        </li>
+    {% empty %}
+
+    {% endfor %}
+</ul>
+
+
+                            <div style="margin-top: 5rem; margin-bottom: 3rem;">
+
+
+                                <a href="{% url 'item_list_for_request' current_request.id %}"><button style="font-size: 16px; text-decoration: none; padding: 5px; color: white;" class="btn btn-primary">Back to Task List</button></a>
+
+                                <button onclick="window.location.href='{% url 'pdf_view' current_request.id %}'" style="padding: 5px" class="btn btn-primary">Download PDF</button>
+
+                            </div>
+
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <!-- about-page-end -->
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <!-- JS here -->
+    <script src="/static/assets/js/jquery.min.js"></script>
+    <script src="/static/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/assets/js/swipper-bundle.min.js"></script>
+    <script src="/static/assets/js/jquery.meanmenu.min.js"></script>
+    <script src="/static/assets/js/wow.min.js"></script>
+    <script src="/static/assets/js/odometer.min.js"></script>
+    <script src="/static/assets/js/appear.min.js"></script>
+    <script src="/static/assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        // JavaScript to handle the search functionality with highlighting for selected items
+document.getElementById('searchBox').addEventListener('keyup', function() {
+    const searchQuery = this.value.toLowerCase();
+    const items = document.querySelectorAll('#selectedItemsList .item');
+
+    items.forEach(function(item) {
+        const titleElement = item.querySelector('.item-title');
+        const descriptionElement = item.querySelector('.item-description');
+        const title = titleElement.textContent.toLowerCase(); // Title in lowercase
+        const description = descriptionElement.textContent.toLowerCase(); // Description in lowercase
+
+        // Reset the inner HTML to original for both title and description
+        titleElement.innerHTML = item.querySelector('.item-title').textContent;
+        descriptionElement.innerHTML = item.querySelector('.item-description').textContent;
+
+        // Show the item if the search query is found in the title or description
+        if (title.includes(searchQuery) || description.includes(searchQuery)) {
+            item.style.display = ''; // Show the item
+            highlightMatches(titleElement, searchQuery); // Highlight matches in the title
+            highlightMatches(descriptionElement, searchQuery); // Highlight matches in the description
+        } else {
+            item.style.display = 'none'; // Hide the item
+        }
+    });
+});
+
+function highlightMatches(element, query) {
+    const regex = new RegExp(`(${query})`, 'gi'); // Create a regex for case-insensitive matching
+    element.innerHTML = element.textContent.replace(regex, '<span class="highlight">$1</span>'); // Highlight matches
+}
+
+    </script>
+<script>
+    // Handle item removal with AJAX
+    document.querySelectorAll('.remove-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const itemId = this.getAttribute('data-item-id');
+            const listItem = this.closest('li'); // Get the corresponding <li> element
+
+            // Make an AJAX request to remove the item
+            fetch("{% url 'remove_from_selected_for_request' current_request.id 0 %}".replace('/0/', '/' + itemId + '/'), {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is included
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ item_id: itemId })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Remove the item from the list without reloading the page
+                    listItem.remove();
+                } else {
+                    alert("Failed to remove item.");
+                }
+            })
+            .catch(error => {
+                console.error("Error removing item:", error);
+            });
+        });
+    });
+</script>
+
+        <script>
+        // JavaScript to handle the search functionality with highlighting
+        document.getElementById('searchBox').addEventListener('keyup', function() {
+            const searchQuery = this.value.toLowerCase();
+            const items = document.querySelectorAll('#itemsList .item');
+
+            items.forEach(function(item) {
+                const titleElement = item.querySelector('.item-title');
+                const descriptionElement = item.querySelector('.item-description');
+                const title = item.getAttribute('data-title');
+
+                // Reset the inner HTML to original
+                titleElement.innerHTML = title;
+                descriptionElement.innerHTML = item.querySelector('.item-description').textContent;
+
+                if (title.includes(searchQuery)) {
+                    item.style.display = ''; // Show the item
+                    highlightMatches(titleElement, searchQuery);
+                } else {
+                    item.style.display = 'none'; // Hide the item
+                }
+            });
+        });
+
+        function highlightMatches(element, query) {
+            const regex = new RegExp(`(${query})`, 'gi'); // Create a regex for case-insensitive matching
+            element.innerHTML = element.textContent.replace(regex, '<span class="highlight">$1</span>'); // Highlight matches
+        }
+    </script>
+
+
+</body></html>

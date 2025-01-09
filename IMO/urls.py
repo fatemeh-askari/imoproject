@@ -22,3 +22,4 @@ urlpatterns = [
     path('', include('index.urls')),
     path('app/', include('Itemsapp.urls')),
 ]
+

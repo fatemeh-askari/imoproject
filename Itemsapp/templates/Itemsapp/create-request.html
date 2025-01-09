@@ -1,10 +1,246 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Create Request</title>#}
+{#</head>#}
+{#<body>#}
+{#    <h1>Create a New Request</h1>#}
+{#    <form method="post">#}
+{#        {% csrf_token %}#}
+{#        {{ form.as_p }}#}
+{#        <button type="submit">Create Request</button>#}
+{#    </form>#}
+{#</body>#}
+{#</html>#}
+
+{#<!DOCTYPE html>#}
+{#<html lang="fa">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>Create Request</title>#}
+{#    <!-- Bootstrap CSS -->#}
+{#    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#    <style>#}
+{#        /* Custom styles for RTL support */#}
+{#        body {#}
+{#            direction: rtl; /* Set text direction to right-to-left */#}
+{#            font-family: 'Vazirmatn', sans-serif; /* Using the specified font */#}
+{#        }#}
+{#    </style>#}
+{#    <!-- Font from Google Fonts -->#}
+{#    <link rel="preconnect" href="https://fonts.googleapis.com">#}
+{#    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>#}
+{#    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{##}
+{#    <!-- Main container to center and pad content -->#}
+{#    <div class="container mt-5">#}
+{#        <!-- Title Section -->#}
+{#        <div class="row justify-content-center">#}
+{#            <div class="col-md-8 text-center">#}
+{#                <h1 class="mb-4">ایجاد درخواست جدید</h1> <!-- Translated to Farsi -->#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#        <!-- Form Section -->#}
+{#        <div class="row justify-content-center">#}
+{#            <div class="col-md-6">#}
+{#                <!-- Form for creating a new request -->#}
+{#                <form method="post" class="card p-4 shadow-sm">#}
+{#                    {% csrf_token %}#}
+{#                    <!-- Render the form fields dynamically -->#}
+{#                    {{ form.as_p }} <!-- Using as_p since we added classes directly in the form -->#}
+{#                    <!-- Submit button -->#}
+{#                    <div class="text-center mt-4">#}
+{#                        <button type="submit" class="btn btn-primary btn-lg">ایجاد درخواست</button> <!-- Translated to Farsi -->#}
+{#                    </div>#}
+{#                </form>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <!-- Bootstrap JS (optional) -->#}
+{#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>#}
+{#</body>#}
+{#</html>#}
+
+
+
+
+
+
+<html class="no-js" lang="zxx"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>create req</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/assets/img/favicon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="/static/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/assets/css/animate.min.css">
+    <link rel="stylesheet" href="/static/assets/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/static/assets/css/all.min.css">
+    <link rel="stylesheet" href="/static/assets/css/odometer.min.css">
+    <link rel="stylesheet" href="/static/assets/css/meanmenu.css">
+    <link rel="stylesheet" href="/static/assets/css/swipper.css">
+    <link rel="stylesheet" href="/static/assets/css/main.css">
+    <link rel="stylesheet" href="http://cdn.b-tz.com/font/b-mitra/BMitra.css">
 </head>
-<body>
-$END$
-</body>
-</html>
+
+<body style="font-family: 'BMitra', sans-serif;">
+
+    <div class="page-wrapper home-3" data-background="/static/assets/img/bg/page-bg-1.jpg" style="background-image: url(&quot;/static/assets/img/bg/page-bg-1.jpg&quot;);">
+
+        <!-- PRELOADER -->
+
+        <!-- /PRELOADER -->
+
+        <!-- header-start -->
+        <div class="bostami-header-area mb-30 z-index-5">
+            <div class="container">
+                <div class="bostami-header-wrap">
+                    <div class="row">
+
+                        <!-- logo -->
+                        <div class="col-6">
+                            <div class="bostami-header-logo">
+                                <a class="site-logo" href="{% url 'create_request' %}">
+                                    <img src="" alt="">
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- menu btn -->
+                        <div class="col-6">
+                            <div class="bostami-header-menu-btn text-right mb-0">
+                                <div class="dark-btn dark-btn-stored dark-btn-icon">
+                                    <i class="fa-light fa-moon"></i>
+                                    <i class="fa-light fa-sun"></i>
+                                </div>
+                                <div class="menu-btn toggle_menu d-lg-none">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- mobile menu -->
+                <div class="mobile-menu-wrap">
+                    <div class="mobile-menu mobile_menu_3 mean-container"><div class="mean-bar"><a href="#nav" class="meanmenu-reveal" style="right: 0px; left: auto; display: inline;"><span><span><span></span></span></span></a><nav class="mean-nav">
+                                <ul style="display: none;">
+                                    <li class="active mean-last">
+                                        <a href="{% url 'request_list' %}">
+                                            <span>
+                                                <i class="fa-light fa-address-book"></i>
+                                            </span>
+                                            contact
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- header-end -->
+
+
+        <div class="container z-index-3">
+            <div class="row">
+
+
+                <!-- about-page-start -->
+                <div class="col-xxl-12 col-xl-12 col-lg-12">
+
+                    <!-- main-menu-start -->
+                    <div class="text-right">
+                        <div class="bostami-main-menu-wrap">
+                            <form class="d-flex" action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-danger" type="submit">Logout</button>
+                </form>
+                            <div class="mean-push"></div><nav class="bastami-main-menu main_menu_3" style="display: none;">
+                                <ul>
+                                    <li>
+                                        <a href="{% url 'create_request' %}">
+                                            <span>
+                                                <i class="fa-light fa-newspaper"></i>
+                                            </span>
+                                            New
+                                        </a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="{% url 'request_list' %}">
+                                            <span>
+                                                <i class="fa-light fa-address-book"></i>
+                                            </span>
+                                            Reports
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <!-- main-menu-end -->
+
+                    <div class="bostami-page-content-wrap">
+
+                        <!-- page title -->
+                        <div class="section-wrapper pl-60 pr-60 pt-60">
+                            <div class="bostami-page-title-wrap mb-15">
+{#                                <h2 class="page-title">INFO</h2>#}
+                                <h2 class="page-title"></h2>
+                            </div>
+                        </div>
+
+                        <!-- contact form -->
+                        <div class="section-wrapper pr-60 pl-60 mb-60">
+                            <div class="contact-area bg-light-white-2">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <!-- Render the form fields dynamically -->
+                                    {{ form.as_p }} <!-- Using as_p since we added classes directly in the form -->
+                                    <!-- Submit button -->
+                                    <div class="text-center mt-4">
+                                        <button type="submit" class="btn btn-secondary btn-lg" style="font-family: sans-serif; font-size: 14px">Create Report</button> <!-- Translated to Farsi -->
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <!-- about-page-end -->
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <!-- JS here -->
+    <script src="/static/assets/js/jquery.min.js"></script>
+    <script src="/static/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/assets/js/swipper-bundle.min.js"></script>
+    <script src="/static/assets/js/jquery.meanmenu.min.js"></script>
+    <script src="/static/assets/js/wow.min.js"></script>
+    <script src="/static/assets/js/odometer.min.js"></script>
+    <script src="/static/assets/js/appear.min.js"></script>
+    <script src="/static/assets/js/main.js"></script>
+
+
+</body></html>
